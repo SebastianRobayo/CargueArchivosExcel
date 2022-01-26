@@ -9,8 +9,8 @@ app.use(
   conn(mysql, {
     host: "localhost",
     port: 3306,
-    user: "root",
-    password: "",
+    user: "baq",
+    password: "Asiste.2021",
     database: "subidadatos",
   })
 );

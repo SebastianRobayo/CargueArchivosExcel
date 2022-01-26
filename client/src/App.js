@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import axios from "axios";
 
 function App() {
   const [file, setFile] = useState(null);
 
   const selectedHandle = (e) => {
-    setFile(e.target.file[0]);
+    setFile(e.target.files[0]);
   };
 
   const sendHandle = () => {
@@ -14,12 +13,24 @@ function App() {
       alert("debes cargar un archivo");
       return;
     }
+
+    const formdata = new FormData();
+    formdata.append("archivo", file);
+
+    fetch("http://localhost:5000/files/post", {
+      method: "POST",
+      body: formdata,
+    })
+      .then((res) => res.text())
+      .then((res) => console.log(res))
+      .catch((err) => {
+        console.error(err);
+      });
+
+    document.getElementById("fileinput").value = null;
+
+    setFile(null);
   };
-
-  const formdata = new FormData();
-  formdata.append("file", file);
-
-  axios.post("http://localhost:5000/files");
 
   return (
     <div className="App">
@@ -29,7 +40,7 @@ function App() {
             <div className="row">
               <div className="col-md-10">
                 <input
-                  id="fileInput"
+                  id="fileinput"
                   type="file"
                   className="form-control"
                   onChange={selectedHandle}
